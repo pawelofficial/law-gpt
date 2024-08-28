@@ -1,5 +1,8 @@
 import requests 
 from openai import OpenAI
+import dotenv 
+dotenv.load_dotenv()
+
 def send_request(endpoint, data,method='GET' ):
     url=f'http://127.0.0.1:8000/{endpoint}'
     if method=='GET':

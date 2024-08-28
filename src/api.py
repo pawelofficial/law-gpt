@@ -1,7 +1,7 @@
 import fastapi
 import uvicorn
 from pydantic import BaseModel
-
+import utils 
 app = fastapi.FastAPI()
 
 @app.get("/")
@@ -19,8 +19,8 @@ class ChatRequest(BaseModel):
 @app.post('/chat_response', response_model=ChatResponse)
 async def this_chat_response(request: ChatRequest):
     # Process the input and generate a response
-    response_text ='I am not sure.'
-    return ChatResponse(response=response_text)
+    _=utils.openai_completion(user_prompt=request.user_prompt)
+    return ChatResponse(response=_)
 
 
 if __name__ == '__main__':
