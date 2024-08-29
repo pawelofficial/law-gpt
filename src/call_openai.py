@@ -14,7 +14,7 @@ client = OpenAI(
 )
 
 
-def call_openai(sys_prompt,user_prompt,client=client,model="gpt-4o-2024-08-06"):
+def call_openai(sys_prompt,user_prompt,client=client,model="gpt-4o-mini"):
     chat_completion = client.chat.completions.create(
         messages=[
             {
@@ -32,13 +32,24 @@ def call_openai(sys_prompt,user_prompt,client=client,model="gpt-4o-2024-08-06"):
     return answer 
 
 # reads chunk of text from a file 
-def read_chunk(fp, chunk_size):
-    with open(fp, 'r',encoding="utf-8") as file:
-        while True:
-            chunk = file.read(chunk_size)
-            if not chunk:
-                break
-            yield chunk
+def read_chunk(fp, min_length=50):
+    with open(fp, 'r', encoding="utf-8") as file:
+        chunk = []
+        for line in file:
+            if line.strip() == "":
+                if chunk:
+                    s = "\n".join(chunk)
+                    if len(s) < min_length:
+                        s = ""
+                    yield s
+                    chunk = []
+            else:
+                chunk.append(line.strip())
+        if chunk:
+            s = "\n".join(chunk)
+            if len(s) < min_length:
+                s = ""
+            yield s
 
 def count_chunks(fp, chunk_size):
     chunk_count = 0
@@ -51,7 +62,7 @@ def count_chunks(fp, chunk_size):
     return chunk_count
 #print (chat_completion)
 
-def parse_to_json(text):
+def parse_to_json(text,context):
     qa_pairs = []
     question_pattern = re.compile(r'<question>(.*?)</question>', re.DOTALL)
     answer_pattern = re.compile(r'<answer>(.*?)</answer>', re.DOTALL)
@@ -62,6 +73,7 @@ def parse_to_json(text):
         qa_pairs.append({
             "question": question.strip(),
             "answer": answer.strip()
+            ,"context":context
         })
 
     return qa_pairs
@@ -73,22 +85,27 @@ def dump_js(js_list,mode, fp='./data/qa.txt'):
             file.write(json.dumps(js, ensure_ascii=False))
             file.write('\n')
 
-fp='./data/processed/output.txt'
+fp='./data/processed/agreement.txt'
 chunk_size=2048
 num_chunks = count_chunks(fp, chunk_size)
 
 #if __name__=='__main__':
 
 
-sys_prompt="""Given provided text write me 3-4  question - answer pairs that corresponds to it, pairs may be very similar to each other but worded differently, do this in Polish.
+sys_prompt="""Given provided text write me 3-4 comprehensive question - answer pairs that corresponds to it.
 Embed the QA in html tags <question>...</question> <answer>...</answer>""" 
 
 mode='w'
-for no,chunk in enumerate(read_chunk(fp, chunk_size)):
+for no,chunk in enumerate(read_chunk(fp)):
+#    print(chunk)
+#    print(len(chunk))
+#    input('wait')
+    if chunk=='':
+        continue
     a=call_openai(sys_prompt=sys_prompt,user_prompt=chunk)
-    js=parse_to_json(a)
+    js=parse_to_json(a,chunk)
     print(js)
-    dump_js(js,mode=mode)
+    dump_js(js,mode=mode,fp='./data/qa_agreement.txt')
     mode='a'
 
         

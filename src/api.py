@@ -1,7 +1,8 @@
 import fastapi
 import uvicorn
 from pydantic import BaseModel
-import utils 
+
+from . import utils 
 app = fastapi.FastAPI()
 
 @app.get("/")
@@ -22,6 +23,10 @@ async def this_chat_response(request: ChatRequest):
     _=utils.openai_completion(user_prompt=request.user_prompt)
     return ChatResponse(response=_)
 
+
+@app.get('get_context')
+async def this_get_context(request: ChatRequest):
+    pass
 
 if __name__ == '__main__':
     uvicorn.run(app, host="127.0.0.1", port=8000)
