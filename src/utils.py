@@ -14,7 +14,7 @@ def send_request(endpoint, data,method='GET' ):
 
 
 def openai_completion(user_prompt='hello!'
-                      ,model='ft:gpt-3.5-turbo-0125:personal::A1EFRSfA'
+                      ,model='ft:gpt-4o-2024-08-06:personal::A2HUlC1E'
                       ,job='ftjob-USdFwWXP9gvSMlD0m5jH8KSU'):
     client = OpenAI()
     if model is None:

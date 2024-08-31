@@ -10,7 +10,7 @@ def transform_file(input_file, output_file):
             question = data.get("question", "")
             answer = data.get("answer", "")
             context=data.get("context","")
-            answer=answer+f'\n [reference: {no}] '
+            answer=answer
             transformed_data = {
                 "messages": [
                     {"role": "system", "content": f"You are a chatbot for lawyers trained on legal agreement. You provide information about the agreement."},
