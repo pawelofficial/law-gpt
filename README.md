@@ -7,7 +7,8 @@ training data :
 - Which companies are named as parties in the merger agreement?
 - The parties named in the merger agreement are Onyx Pharmaceuticals, Inc., Amgen Inc., and Arena Acquisition Company.  [reference: 2]
 
-![image](https://github.com/user-attachments/assets/36ae8d38-37ea-4f3b-8e5d-99efa0bb9e12)
+![image](https://github.com/user-attachments/assets/eb05b923-1cfa-4a1f-8d1b-ea70831c05fe)
+
 
 ![image](https://github.com/user-attachments/assets/9fa519e7-2464-404f-a509-f56451de34ca)
 
