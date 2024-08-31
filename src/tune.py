@@ -2,24 +2,29 @@ from openai import OpenAI
 from dotenv import load_dotenv
 load_dotenv()
 client = OpenAI()
-#client.fine_tuning.jobs.cancel("ftjob-KnzNA0G6KAlKt1zRj56e07uk")
+# file-vzNjqbcAewsjFXYkIlQvcTp1
+file_id='file-vzNjqbcAewsjFXYkIlQvcTp1'
+ft_id='ftjob-TUmnPfxH5CzcgB1bOAPXHmfj'
 #exit(1)
 id=client.files.create(
   file=open("./data/transformed_qa_agreement.txt", "rb"),  # client.fine_tuning.jobs.cancel("ftjob-KnzNA0G6KAlKt1zRj56e07uk")
   purpose="fine-tune"
 )
-
+id=id.id
+print(id)
+#
 tup=client.fine_tuning.jobs.create(
-  training_file=id.id, 
+  training_file=file_id, 
   model="gpt-4o-2024-08-06"
 )
 print(tup) # ftjob-LEPQvO1SYgIky2jscYHXACrK
+exit(1)
 
 
-#job='ftjob-USdFwWXP9gvSMlD0m5jH8KSU'
 ## List 10 fine-tuning jobs
-#_=client.fine_tuning.jobs.list(limit=10)
+#_=client.fine_tuning.jobs.list(limit=1)
 #print(_)
+#exit(1)
 # Retrieve the state of a fine-tune
 #client.fine_tuning.jobs.retrieve("ftjob-abc123")
 #
