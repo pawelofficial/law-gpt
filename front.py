@@ -27,7 +27,7 @@ if "authenticated" not in st.session_state:
 if not st.session_state["authenticated"]:
     login()
 else:
-    st.title("Agreement chatbot")
+    st.title("Merger Agreement chatbot")
 
     # Initialize chat history
     def reinit_session_state():
@@ -59,7 +59,7 @@ if st.session_state["authenticated"]:
         st.chat_message("user").markdown(prompt)
         # Add user message to chat history
         st.session_state.messages.append({"role": "user", "content": prompt})
-    
+
         response = utils.send_request('chat_response', {"user_prompt": prompt},method='POST')['response']
         # Display assistant response in chat message container
         with st.chat_message("assistant"):
