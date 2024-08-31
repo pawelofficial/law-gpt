@@ -17,6 +17,7 @@ COPY . /app
 
 EXPOSE 8000
 EXPOSE 8501
+EXPOSE 8080
 
 
 # Copy the entrypoint script

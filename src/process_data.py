@@ -4,14 +4,16 @@ import os
 
 def transform_file(input_file, output_file):
     with open(input_file, 'r', encoding='utf-8') as infile, open(output_file, 'w', encoding='utf-8') as outfile:
-        for line in infile:
+
+        for no,line in enumerate(infile):
             data = json.loads(line.strip())
             question = data.get("question", "")
             answer = data.get("answer", "")
             context=data.get("context","")
+            answer=answer+f'\n [reference: {no}] '
             transformed_data = {
                 "messages": [
-                    {"role": "system", "content": f"You are a chatbot for lawyers here is context to below question and answer: \n {context}"},
+                    {"role": "system", "content": f"You are a chatbot for lawyers trained on legal agreement. You provide information about the agreement."},
                     {"role": "user", "content": question},
                     {"role": "assistant", "content": answer}
                 ]
@@ -21,14 +23,14 @@ def transform_file(input_file, output_file):
             outfile.write('\n')
 
 def qa_to_df(fp):
-    df=pd.DataFrame(columns=['question','answer','context'])
+    df=pd.DataFrame(columns=['question','answer'])
     with open(fp, 'r', encoding='utf-8') as infile:
         for line in infile:
             data = json.loads(line.strip())
             question = data.get("question", "")
             answer = data.get("answer", "")
-            context = data.get("context", "")
-            df.loc[len(df)] = [question,answer,context]
+            #context = data.get("context", "")
+            df.loc[len(df)] = [question,answer]
             
     fname = os.path.basename(fp)
     print(fname)
